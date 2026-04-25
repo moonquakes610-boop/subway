@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>核心功能 — 地铁出行指南综合页</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#guide-query">跳过导航，前往路线查询</a>
+
+    <nav class="top-nav" aria-label="页面主导航">
+      <div class="top-nav__inner">
+        <a href="/" class="top-nav__brand" style="text-decoration: none; color: var(--accent)">出行指南</a>
+        <div class="top-nav__links">
+          <a href="#guide-query">路线查询</a>
+          <a href="#guide-rules">乘车规则</a>
+          <a href="#guide-prohibited">禁带物品</a>
+          <a href="#guide-a11y">无障碍服务</a>
+          <a href="#guide-feedback">问题反馈</a>
+          <a href="/profile.html">个人中心</a>
+          <a href="/admin.html" id="navAdminLink">管理后台</a>
+          <span class="nav-user-wrap" title="当前用户">
+            <span class="avatar-badge" id="navAvatar">🙂</span>
+            <span class="nav-user" id="navUser"></span>
+          </span>
+          <button type="button" class="link-btn" id="navLogout" title="安全退出">退出</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page">
+      <header class="hero" id="top">
+        <h1>地铁出行指南智能生成系统</h1>
+        <p>路线规划、乘车规范、禁带品提示与重点站点无障碍信息（已登录）</p>
+      </header>
+
+      <section class="card section-anchor" id="guide-query" aria-labelledby="t-query">
+        <h2 class="section-title" id="t-query">路线查询</h2>
+        <p class="section-lead">输入起终点，选择最短时间或最少换乘；成功查询将写入个人历史记录。</p>
+        <div class="form-grid">
+          <div class="form-row">
+            <div>
+              <label for="from">起点站</label>
+              <input type="text" id="from" name="from" placeholder="例：西单" autocomplete="off" />
+            </div>
+            <div>
+              <label for="to">终点站</label>
+              <input type="text" id="to" name="to" placeholder="例：圆明园" autocomplete="off" />
+            </div>
+          </div>
+          <div>
+            <span class="label-block" style="font-size: 0.85rem; font-weight: 500; color: var(--muted)">规划策略</span>
+            <div class="radios" role="radiogroup" aria-label="规划策略">
+              <label><input type="radio" name="strategy" value="min_time" checked /> 最短时间</label>
+              <label><input type="radio" name="strategy" value="min_transfer" /> 最少换乘</label>
+              <label><input type="radio" name="strategy" value="compare" /> 智能对比推荐</label>
+            </div>
+          </div>
+          <div>
+            <label for="guideMode">出行场景</label>
+            <select id="guideMode" name="guideMode">
+              <option value="commute" selected>通勤</option>
+              <option value="tour">游客</option>
+              <option value="senior">老人/带娃</option>
+              <option value="rush">赶时间</option>
+            </select>
+          </div>
+          <div>
+            <label for="queryTime">查询/假设出发时刻（可选）</label>
+            <input type="time" id="queryTime" name="queryTime" step="60" />
+            <p class="section-lead" style="font-size: 0.8rem; margin: 0.25rem 0 0; color: var(--muted)">
+              不填则使用服务器当前时间做首末班模型校验；可选手动设为凌晨等时刻，用于测试「有路线但当前不可乘车」并见下方各线首末时间。
+            </p>
+          </div>
+          <div class="api-row">
+            <div style="font-size: 0.85rem; font-weight: 500; color: var(--muted)">连接方式</div>
+            <small>与后端同域会话鉴权。当前前址：<code id="apiBaseDisplay">/</code></small>
+          </div>
+        </div>
+        <button type="button" class="primary" id="queryBtn">查询路线</button>
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+      </section>
+
+      <p class="empty-panel" id="emptyHint">
+        在上方提交查询后，本区域将显示行程概览、分步路线、智能文字指南，以及「本行程相关站点」的无障碍与客服信息。
+      </p>
+
+      <div id="resultSection" class="hidden" aria-hidden="true">
+        <section class="card" id="resultTrip" aria-label="行程概览">
+          <h2 class="block-title">行程概览</h2>
+          <div class="metrics">
+            <div class="metric">
+              <div class="v" id="metricTime">—</div>
+              <div class="k">预计时间</div>
+            </div>
+            <div class="metric">
+              <div class="v" id="metricArrival">—</div>
+              <div class="k">约到达时刻</div>
+            </div>
+            <div class="metric">
+              <div class="v" id="metricFare">—</div>
+              <div class="k">估算票价</div>
+            </div>
+            <div class="metric">
+              <div class="v" id="metricXfer">—</div>
+              <div class="k">换乘次数</div>
+            </div>
+          </div>
+          <div class="trip-meta-cards">
+            <div class="trip-meta-card">
+              <div class="trip-meta-card__label">线路建议</div>
+              <div class="trip-meta-card__value" id="metricLinePlan">—</div>
+            </div>
+            <div class="trip-meta-card">
+              <div class="trip-meta-card__label">换乘建议</div>
+              <div class="trip-meta-card__value" id="metricTransferPlan">—</div>
+            </div>
+            <div class="trip-meta-card">
+              <div class="trip-meta-card__label">时段可行性</div>
+              <div class="trip-meta-card__value" id="metricServiceCheck">—</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="resultRoute" aria-label="乘车路线">
+          <h2 class="block-title">路线</h2>
+          <p class="section-lead" id="routeHint" style="margin-top: 0; font-size: 0.9rem; color: var(--muted)">
+            同一条线路的站点以「站 → 站」串起；换乘时换用下一条色带。顺序与站序同乘车方向。
+          </p>
+          <div id="routeTransitRoot" class="transit-root"></div>
+        </section>
+
+        <section class="card" id="resultRecommend" aria-label="智能推荐说明">
+          <h2 class="block-title">智能推荐说明</h2>
+          <p class="section-lead" id="sceneFocusPanel">系统将在查询后给出当前场景的重点关注项。</p>
+          <p class="section-lead" id="recommendReason">系统将在查询后给出推荐理由。</p>
+        </section>
+
+        <section class="card hidden" id="routeOpStatusPanel" aria-label="查询时刻与运营状态">
+          <h2 class="block-title">查询时刻 · 本路线运营状态</h2>
+          <p class="op-query-line" id="opQueryTimeLine">查询/假设出发时刻：—</p>
+          <p class="section-lead" id="opHeadline"></p>
+          <div class="history-table-wrap" id="opServiceTable"></div>
+          <h3 class="op-subtitle" id="opRuntimeSubtitle">本路线各线客流/运营提示</h3>
+          <p class="section-lead op-runtime-note" id="opRuntimeNote" style="font-size: 0.9rem; color: var(--muted)"></p>
+          <div id="opRuntimeList" class="runtime-list"></div>
+        </section>
+
+        <section class="card" id="result-a11y" aria-labelledby="t-result-a11y" tabindex="-1">
+          <h2 class="block-title" id="t-result-a11y">本行程相关站点 — 无障碍与客服</h2>
+          <p class="section-lead" id="a11yResultIntro">含起点、终点及换乘站，数据来自可维护的站点库；未录字段显示「暂未收录」。</p>
+          <div id="resultA11yList" class="a11y-grid"></div>
+          <p class="status hint" id="a11yResultStatus" hidden></p>
+        </section>
+
+        <section class="card" id="resultGuide" aria-label="智能出行指南">
+          <h2 class="block-title">智能文字出行指南</h2>
+          <div class="radios" style="margin-bottom: 0.5rem">
+            <button type="button" class="link-btn" id="copyGuideBtn">复制路线文本</button>
+            <button type="button" class="link-btn" id="exportGuideBtn">导出本次指南</button>
+          </div>
+          <pre class="guide" id="guideText"></pre>
+        </section>
+
+        <section class="card" id="resultAlternatives" aria-label="备选方案对比">
+          <h2 class="block-title">备选方案对比</h2>
+          <p class="section-lead">提供最短时间与最少换乘两套方案，便于你快速决策。</p>
+          <div id="alternativesGrid" class="alternatives-grid"></div>
+        </section>
+      </div>
+
+      <section class="card section-anchor section-loaded" id="guide-rules" aria-labelledby="t-rules">
+        <h2 class="section-title" id="t-rules">乘客乘车规则</h2>
+        <p class="section-lead" id="rulesIntro">常见安检、候车、文明乘车、禁止行为与应急说明（自数据源加载）。</p>
+        <div class="ref-status" id="rulesLoadStatus" role="status">正在加载…</div>
+        <div id="rulesAccordion" class="accordion"></div>
+      </section>
+
+      <section class="card section-anchor section-loaded" id="guide-prohibited" aria-labelledby="t-proh">
+        <h2 class="section-title" id="t-proh">禁止携带物品</h2>
+        <p class="section-lead" id="prohibitedIntro">按风险类别分组的禁带/限带示例（以法规与现场为准）。</p>
+        <div class="ref-status" id="prohibitedLoadStatus" role="status">正在加载…</div>
+        <div id="prohibitedGrid" class="prohibited-grid"></div>
+      </section>
+
+      <section class="card section-anchor section-loaded" id="guide-a11y" aria-labelledby="t-a11y">
+        <h2 class="section-title" id="t-a11y">无障碍服务（说明）</h2>
+        <p class="section-lead" id="a11yMeta" data-placeholder="数据加载中…">——</p>
+        <p class="section-lead" style="margin-top: 0.75rem; color: var(--muted)">
+          <strong>重点：</strong>完成路线查询后，各站点无障碍与客服信息在<strong>结果区</strong>按站列出；站点数据在
+          <code>data/reference/station_accessibility.json</code> 中维护。
+        </p>
+      </section>
+
+      <section class="card section-anchor" id="guide-feedback" aria-label="问题反馈">
+        <h2 class="section-title">乘客问题反馈</h2>
+        <p class="section-lead">若路线、站点信息或无障碍等存在问题，可在此提交给系统管理员（提交后请至个人中心或管理后台查看处理进度）。</p>
+        <div class="form-grid">
+          <div class="form-row">
+            <div>
+              <label for="fbIssueType">问题类型</label>
+              <select id="fbIssueType">
+                <option value="route_bad" selected>路线不合理</option>
+                <option value="station_outdated">站点信息过时</option>
+                <option value="a11y_error">无障碍信息错误</option>
+                <option value="other">其他</option>
+              </select>
+            </div>
+            <div>
+              <label for="fbSeverity">严重程度</label>
+              <select id="fbSeverity">
+                <option value="high">高（影响出行）</option>
+                <option value="medium" selected>中（影响体验）</option>
+                <option value="low">低（优化建议）</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label for="fbContact">联系方式（可选）</label>
+              <input type="text" id="fbContact" placeholder="手机号/邮箱/微信（选填）" />
+            </div>
+          </div>
+          <div>
+            <label><input type="checkbox" id="fbRepro" /> 问题可稳定复现</label>
+          </div>
+          <div>
+            <label for="fbContent">问题描述</label>
+            <textarea id="fbContent" rows="4" placeholder="请描述你遇到的问题，建议包含站点、时段、具体现象。"></textarea>
+          </div>
+        </div>
+        <button type="button" class="primary" id="fbSubmitBtn">提交反馈</button>
+        <p class="status" id="fbStatus" role="status"></p>
+      </section>
+
+      <footer class="note">北京地铁数据、票价、无障碍为课程数据模型，出行请以现场与官方 App 为准。</footer>
+    </div>
+    <script src="js/api-base.js"></script>
+    <script>
+      window.__appBoot = window.apiFetch("/api/auth/me").then(function (r) {
+        if (r.status === 401) {
+          location.replace("/login.html?next=" + encodeURIComponent("/app.html"));
+          return { ok: false };
+        }
+        return r.json().then(function (d) {
+          return { ok: true, user: d && d.user };
+        });
+      });
+    </script>
+    <script>
+      (function () {
+        var b = (window.getApiBase && window.getApiBase()) || location.origin;
+        if (!b) b = location.origin;
+        var el = document.getElementById("apiBaseDisplay");
+        if (el) el.textContent = b || "/";
+      })();
+    </script>
+    <script src="js/app.js" defer></script>
+  </body>
+</html>

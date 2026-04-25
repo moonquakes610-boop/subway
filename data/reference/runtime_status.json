@@ -1,0 +1,23 @@
+{
+  "version": "2026-04-24-demo",
+  "updated_at": "2026-04-24 09:30",
+  "overall": "normal",
+  "summary": "当前线路整体运行平稳，个别站点高峰时段客流较大，请留意站内引导。",
+  "lines": [
+    {
+      "line": "1号线",
+      "status": "normal",
+      "message": "运行正常。"
+    },
+    {
+      "line": "10号线",
+      "status": "crowded",
+      "message": "工作日晚高峰部分区段拥挤，建议预留 5-10 分钟。"
+    },
+    {
+      "line": "13号线",
+      "status": "normal",
+      "message": "运行正常。"
+    }
+  ]
+}

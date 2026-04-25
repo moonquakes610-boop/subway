@@ -1,0 +1,152 @@
+{
+  "query": {
+    "from": "西单",
+    "to": "圆明园"
+  },
+  "resolved_stations": {
+    "from": "西单",
+    "to": "圆明园"
+  },
+  "elapsed_seconds": 26.4417,
+  "plans": [
+    {
+      "objective": "最短时间",
+      "total_time_minutes_rounded": 23.55,
+      "transfer_count": 0,
+      "estimated_fare_yuan": 5,
+      "steps": [
+        {
+          "line": "4号线",
+          "station": "西单"
+        },
+        {
+          "line": "4号线",
+          "station": "灵境胡同"
+        },
+        {
+          "line": "4号线",
+          "station": "西四"
+        },
+        {
+          "line": "4号线",
+          "station": "平安里"
+        },
+        {
+          "line": "4号线",
+          "station": "新街口"
+        },
+        {
+          "line": "4号线",
+          "station": "西直门"
+        },
+        {
+          "line": "4号线",
+          "station": "动物园"
+        },
+        {
+          "line": "4号线",
+          "station": "国家图书馆"
+        },
+        {
+          "line": "4号线",
+          "station": "魏公村"
+        },
+        {
+          "line": "4号线",
+          "station": "人民大学"
+        },
+        {
+          "line": "4号线",
+          "station": "海淀黄庄"
+        },
+        {
+          "line": "4号线",
+          "station": "中关村"
+        },
+        {
+          "line": "4号线",
+          "station": "北京大学东门"
+        },
+        {
+          "line": "4号线",
+          "station": "圆明园"
+        }
+      ]
+    },
+    {
+      "objective": "最少换乘",
+      "total_time_minutes_rounded": 23.55,
+      "transfer_count": 0,
+      "estimated_fare_yuan": 5,
+      "steps": [
+        {
+          "line": "4号线",
+          "station": "西单"
+        },
+        {
+          "line": "4号线",
+          "station": "灵境胡同"
+        },
+        {
+          "line": "4号线",
+          "station": "西四"
+        },
+        {
+          "line": "4号线",
+          "station": "平安里"
+        },
+        {
+          "line": "4号线",
+          "station": "新街口"
+        },
+        {
+          "line": "4号线",
+          "station": "西直门"
+        },
+        {
+          "line": "4号线",
+          "station": "动物园"
+        },
+        {
+          "line": "4号线",
+          "station": "国家图书馆"
+        },
+        {
+          "line": "4号线",
+          "station": "魏公村"
+        },
+        {
+          "line": "4号线",
+          "station": "人民大学"
+        },
+        {
+          "line": "4号线",
+          "station": "海淀黄庄"
+        },
+        {
+          "line": "4号线",
+          "station": "中关村"
+        },
+        {
+          "line": "4号线",
+          "station": "北京大学东门"
+        },
+        {
+          "line": "4号线",
+          "station": "圆明园"
+        }
+      ]
+    }
+  ],
+  "fare_notes": {
+    "最短时间": [
+      "大路网里程约 14.92 km，适用「大路网」规则：5 元",
+      "估算合计：5 元（演示算法，非官方计费）"
+    ],
+    "最少换乘": [
+      "大路网里程约 14.92 km，适用「大路网」规则：5 元",
+      "估算合计：5 元（演示算法，非官方计费）"
+    ]
+  },
+  "same_route": true
+}

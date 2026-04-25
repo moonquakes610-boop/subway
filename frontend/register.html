@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>注册 — 地铁出行指南</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="auth-page">
+    <div class="page auth-page-inner">
+      <h1 class="auth-title">注册</h1>
+      <p class="section-lead" style="text-align: center; margin-top: 0">密码至少 8 位，需同时含字母与数字。用户名 3–20 位，中英数字与下划线。</p>
+
+      <section class="card" style="max-width: 22rem; margin: 0 auto">
+        <form id="formReg" class="form-grid" novalidate>
+          <div>
+            <label for="username">用户名</label>
+            <input type="text" id="username" name="username" required autocomplete="username" />
+          </div>
+          <div>
+            <label for="password">密码</label>
+            <input type="password" id="password" name="password" required autocomplete="new-password" />
+          </div>
+          <div>
+            <label for="password2">确认密码</label>
+            <input type="password" id="password2" name="password2" required autocomplete="new-password" />
+          </div>
+          <div>
+            <label for="avatar">头像</label>
+            <select id="avatar" name="avatar">
+              <option value="🙂" selected>🙂 默认</option>
+              <option value="😎">😎 酷酷的</option>
+              <option value="🧑‍💻">🧑‍💻 技术向</option>
+              <option value="🚇">🚇 地铁控</option>
+              <option value="🧭">🧭 探索者</option>
+              <option value="🌟">🌟 闪亮</option>
+              <option value="🐼">🐼 熊猫</option>
+              <option value="🦊">🦊 小狐狸</option>
+            </select>
+          </div>
+          <div>
+            <label for="role">注册身份</label>
+            <select id="role" name="role">
+              <option value="passenger" selected>普通乘客</option>
+              <option value="admin">管理员</option>
+            </select>
+          </div>
+          <div class="ref-status" id="regStatus" role="status"></div>
+          <button type="submit" class="primary" id="btnReg">注册</button>
+        </form>
+        <p class="auth-switch">
+          已有账号？<a href="/login.html">去登录</a> ·
+          <a href="/">返回首页</a>
+        </p>
+      </section>
+    </div>
+    <script src="js/api-base.js"></script>
+    <script src="js/register.js" defer></script>
+  </body>
+</html>

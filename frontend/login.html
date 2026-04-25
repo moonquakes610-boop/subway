@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>登录 — 地铁出行指南</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="auth-page">
+    <div class="page auth-page-inner">
+      <h1 class="auth-title">登录</h1>
+      <p class="section-lead" style="text-align: center; margin-top: 0">使用已注册账号进入核心功能与历史记录。</p>
+
+      <section class="card" style="max-width: 22rem; margin: 0 auto">
+        <form id="formLogin" class="form-grid" novalidate>
+          <div>
+            <label for="username">用户名</label>
+            <input type="text" id="username" name="username" required autocomplete="username" />
+          </div>
+          <div>
+            <label for="password">密码</label>
+            <input type="password" id="password" name="password" required autocomplete="current-password" />
+          </div>
+          <div class="radios" style="padding: 0">
+            <label><input type="checkbox" id="remember" name="remember" /> 保持登录 30 天</label>
+          </div>
+          <div class="ref-status" id="loginStatus" role="status"></div>
+          <button type="submit" class="primary" id="btnLogin">登录</button>
+        </form>
+        <p class="auth-switch">
+          没有账号？<a href="/register.html">去注册</a> ·
+          <a href="/">返回首页</a>
+        </p>
+      </section>
+    </div>
+    <script src="js/api-base.js"></script>
+    <script src="js/login.js" defer></script>
+  </body>
+</html>

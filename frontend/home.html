@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>地铁出行指南智能生成系统</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="top-nav" aria-label="主导航">
+      <div class="top-nav__inner">
+        <span class="top-nav__brand">出行指南</span>
+        <div class="top-nav__links">
+          <a href="/login.html">登录</a>
+          <a href="/register.html">注册</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page home-wrap">
+      <header class="hero home-hero">
+        <h1>地铁出行指南智能生成系统</h1>
+        <p>面向北京地铁网的路径规划、票价估算、智能文字出行指南与综合信息服务</p>
+      </header>
+
+      <section class="card home-intro">
+        <h2 class="section-title" style="border: none; padding: 0">系统简介</h2>
+        <p class="section-lead" style="color: var(--text)">
+          本系统覆盖「数据加载 → 双目标最短路 → 指南生成」全流程，并整合乘客规则、禁带品提示、站点无障碍等模块。
+          为保障数据与算力可追踪，<strong>路线查询、智能指南与个性化历史记录</strong>需在
+          <strong>注册并登录</strong>后使用。
+        </p>
+        <ul class="home-list">
+          <li>双策略规划：最短时间、最少换乘</li>
+          <li>自然语言式出行说明与参考数据联动</li>
+          <li>用户专属查询历史（登录后记录）</li>
+        </ul>
+        <div class="home-cta">
+          <a class="button-link primary" href="/register.html">新用户注册</a>
+          <a class="button-link" href="/login.html">已有账号登录</a>
+          <a class="button-link accent-outline" href="/app.html">进入核心功能</a>
+        </div>
+        <p class="section-lead" style="margin-top: 1.25rem; font-size: 0.8rem">「进入核心功能」前请先登录，未登录将跳转至登录页。</p>
+      </section>
+
+      <section class="card home-intro">
+        <h2 class="section-title" style="border: none; padding: 0">使用说明</h2>
+        <ol class="home-list" style="list-style: decimal">
+          <li>在本地启动后端 <code>py -3 api_server.py</code>（同端口 8765 提供页面与接口）。</li>
+          <li>注册账号后登录，打开「进入核心功能」使用完整能力。</li>
+        </ol>
+      </section>
+
+      <footer class="note">本页为公开页面。北京地铁与票价数据为课程数据模型，以现场与官方信息为准。</footer>
+    </div>
+  </body>
+</html>

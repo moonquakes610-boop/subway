@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>管理者后台 — 地铁出行指南</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="top-nav" aria-label="主导航">
+      <div class="top-nav__inner">
+        <a href="/app.html" class="top-nav__brand" style="text-decoration: none; color: var(--accent)">管理员后台</a>
+        <div class="top-nav__links">
+          <a href="/app.html">核心功能</a>
+          <a href="/profile.html">个人中心</a>
+          <button type="button" class="link-btn" id="btnLogout">退出登录</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page">
+      <h1 class="section-title" style="border: none; padding: 0">管理者界面</h1>
+      <p class="section-lead" id="adminGreet">正在校验管理员权限…</p>
+
+      <section class="card">
+        <h2 class="block-title">系统概览</h2>
+        <div class="metrics">
+          <div class="metric">
+            <div class="v" id="mUsers">—</div>
+            <div class="k">总用户数</div>
+          </div>
+          <div class="metric">
+            <div class="v" id="mQueries">—</div>
+            <div class="k">总查询数</div>
+          </div>
+          <div class="metric">
+            <div class="v" id="mActive">—</div>
+            <div class="k">近7天活跃用户</div>
+          </div>
+          <div class="metric">
+            <div class="v" id="mFeedback">—</div>
+            <div class="k">总反馈数</div>
+          </div>
+          <div class="metric">
+            <div class="v" id="mFeedbackPending">—</div>
+            <div class="k">待处理反馈</div>
+          </div>
+          <div class="metric">
+            <div class="v" id="mFeedbackOverdue">—</div>
+            <div class="k">超时未处理</div>
+          </div>
+        </div>
+        <p class="ref-status" id="summaryStatus" role="status"></p>
+      </section>
+
+      <section class="card">
+        <h2 class="block-title">用户列表</h2>
+        <p class="section-lead">查看注册用户、查询次数和最近查询时间（按注册时间倒序）。</p>
+        <div class="ref-status" id="usersStatus">正在加载…</div>
+        <div class="history-table-wrap" id="usersTable"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="block-title">最近全站查询记录</h2>
+        <p class="section-lead">用于管理员查看系统使用情况，包含用户名与查询参数。</p>
+        <div class="ref-status" id="historyStatus">正在加载…</div>
+        <div class="history-table-wrap" id="historyTable"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="block-title">乘客反馈管理</h2>
+        <p class="section-lead">
+          查看用户反馈并更新处理状态。列表数据来自本机
+          <code>data/auth/app.db</code> 中已持久化的记录；若首次打开就看到多条「待处理」，多半是
+          此前在本机测试、联调、脚本跑通过程中写入的反馈，不是界面自带的「假数据」。全新使用前可在项目根执行
+          <code>py -3 scripts/clear_feedback.py</code> 清空反馈表（用户与历史不受影响）。
+        </p>
+        <div class="metrics" id="fbStatsCards">
+          <div class="metric"><div class="v" id="fbStatPending">0</div><div class="k">待处理</div></div>
+          <div class="metric"><div class="v" id="fbStatInProgress">0</div><div class="k">处理中</div></div>
+          <div class="metric"><div class="v" id="fbStatResolved">0</div><div class="k">已解决</div></div>
+          <div class="metric"><div class="v" id="fbStatHigh">0</div><div class="k">高严重度</div></div>
+          <div class="metric"><div class="v" id="fbStatRoute">0</div><div class="k">路线问题</div></div>
+        </div>
+        <h3 class="section-title" style="font-size: 1rem; margin-top: 1rem">近7天反馈趋势</h3>
+        <div class="radios" role="radiogroup" aria-label="趋势天数" style="margin-bottom: 0.5rem">
+          <label><input type="radio" name="trendDays" value="7" checked /> 最近7天</label>
+          <label><input type="radio" name="trendDays" value="14" /> 最近14天</label>
+        </div>
+        <div id="fbTrendChart" class="trend-chart"></div>
+        <p class="ref-status" id="fbTrendStatus">正在加载趋势数据…</p>
+        <div class="form-row" style="margin-bottom: 0.75rem">
+          <div>
+            <label for="fbFilterStatus">筛选状态</label>
+            <select id="fbFilterStatus">
+              <option value="all" selected>全部</option>
+              <option value="pending">待处理</option>
+              <option value="in_progress">处理中</option>
+              <option value="resolved">已解决</option>
+            </select>
+          </div>
+          <div>
+            <label for="fbFilterIssueType">问题类型</label>
+            <select id="fbFilterIssueType">
+              <option value="all" selected>全部</option>
+              <option value="route_bad">路线不合理</option>
+              <option value="station_outdated">站点信息过时</option>
+              <option value="a11y_error">无障碍信息错误</option>
+              <option value="other">其他</option>
+            </select>
+          </div>
+          <div>
+            <label for="fbFromDate">开始日期</label>
+            <input type="date" id="fbFromDate" />
+          </div>
+          <div>
+            <label for="fbToDate">结束日期</label>
+            <input type="date" id="fbToDate" />
+          </div>
+          <div style="display: flex; align-items: end">
+            <button type="button" class="primary" id="fbReloadBtn">刷新反馈</button>
+          </div>
+          <div style="display: flex; align-items: end">
+            <button type="button" class="primary" id="fbExportBtn">导出 CSV</button>
+          </div>
+        </div>
+        <div class="ref-status" id="feedbackAdminStatus">正在加载…</div>
+        <div class="history-table-wrap" id="feedbackAdminTable"></div>
+      </section>
+    </div>
+
+    <script src="js/api-base.js"></script>
+    <script src="js/admin.js" defer></script>
+  </body>
+</html>

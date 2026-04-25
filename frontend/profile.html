@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>个人中心 — 地铁出行指南</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <nav class="top-nav" aria-label="主导航">
+      <div class="top-nav__inner">
+        <a href="/app.html" class="top-nav__brand" style="text-decoration: none; color: var(--accent)">出行指南</a>
+        <div class="top-nav__links">
+          <a href="/app.html">核心功能</a>
+          <a href="/admin.html" id="navAdminLink">管理后台</a>
+          <a href="/">首页</a>
+          <button type="button" class="link-btn" id="btnLogout">退出登录</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page">
+      <h1 class="section-title" style="border: none; padding: 0; margin-bottom: 0.5rem">个人中心</h1>
+      <p class="section-lead" id="profileGreet">正在加载…</p>
+      <div class="card" style="max-width: 12rem; text-align: center; margin-bottom: 1rem">
+        <div class="avatar-badge avatar-badge--large" id="profileAvatar">🙂</div>
+        <p class="section-lead" style="margin: 0.5rem 0 0">当前头像</p>
+      </div>
+
+      <section class="card">
+        <h2 class="block-title">账户信息</h2>
+        <dl class="a11y-dl" id="userInfo" style="max-width: 28rem"></dl>
+        <p class="ref-status" id="profileStatus" role="status"></p>
+      </section>
+
+      <section class="card">
+        <h2 class="block-title">最近查询历史</h2>
+        <p class="section-lead">登录后每次成功规划会按用户保存，便于后续复盘与回看。</p>
+        <div class="ref-status" id="historyStatus" role="status">正在加载…</div>
+        <div class="history-table-wrap" id="historyTable"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="block-title">我的问题反馈</h2>
+        <p class="section-lead">查看你提交过的反馈及处理状态。</p>
+        <div class="ref-status" id="feedbackStatus" role="status">正在加载…</div>
+        <div class="history-table-wrap" id="feedbackTable"></div>
+      </section>
+    </div>
+    <script src="js/api-base.js"></script>
+    <script src="js/profile.js" defer></script>
+  </body>
+</html>

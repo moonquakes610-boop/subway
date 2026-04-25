@@ -1,0 +1,536 @@
+// 数据截止2026/04/16，八通线，大兴线完全并入1号线和4号线描述
+// 18号线时刻表 第2版
+{
+    name: "18号线",
+    color: "#685BC6",
+    aliases: ["Line 18"],
+    carriage_num: 6,
+    carriage_type: "B-",
+    design_speed: 80,
+    stations: [
+        {name: "马连洼"},
+        {name: "上地软件园", dist: 2153, aliases: ["Shangdi Software Park"]},
+        {name: "东北旺", dist: 1592},
+        {name: "龙泽西", dist: 3220, aliases: ["Beijiao Nongchang Qiao", "Northern Suburb Farm Bridge"]},
+        {name: "回龙观西大街", dist: 1863},
+        {name: "文华路", dist: 1035},
+        {name: "回龙观东大街", dist: 1759},
+        {name: "霍营东", dist: 1134},
+        {name: "天通苑", dist: 4219},
+        {name: "太平庄", dist: 1058},
+        {name: "天通苑东", dist: 1772}
+    ],
+    train_routes: {
+        "东行": {
+            aliases: ["Eastbound"],
+            "全程车": {},
+            "霍营东出库车": {starts_with: "霍营东"},
+            "霍营东回库车": {ends_with: "霍营东"},
+            "天通苑出库车": {starts_with: "天通苑"}
+        },
+        "西行": {
+            aliases: ["Westbound"],
+            reversed: true,
+            "全程车": {},
+            "霍营东出库车": {starts_with: "霍营东"}
+        }
+    },
+    date_groups: {
+        "工作日": {weekday: [1, 2, 3, 4, 5], aliases: ["Weekdays"]},
+        "双休日": {weekday: [6, 7], aliases: ["Weekends"]}
+    },
+    timetable: {
+        "马连洼": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:39", delta: [8, 8, 7, 9, 8, 8, 8, 8, [7, [7]], 6, 5, 6, [23, [5]]]},
+                        {first_train: "09:49", delta: [6, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6]},
+                        {first_train: "17:33", delta: [6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9]},
+                        {first_train: "21:39", delta: [10, 10, 10, 9, 10, 11, 10, 10, 10, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "22:59", count: 3}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:39", delta: [[99, [10]], 9, 10, 11, 10, 10, 10, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "22:59", count: 3}
+                    ]
+                }
+            },
+            "西行": {
+                // 以+4min计算
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:32", delta: [8, 8, 7, 8, 9, 9, 8, 8, 8, [5, [7]], 6, 6, 5]},
+                        {first_train: "07:43", delta: [[24, [5]], 6, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [7, [7]]]},
+                        {first_train: "17:16", delta: [6, 5, 6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8]},
+                        {first_train: "21:14", delta: [9, [11, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:32", count: 4}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:32", delta: [11, [105, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:32", count: 3}
+                    ]
+                }
+            }
+        },
+        "上地软件园": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:43", delta: [8, 8, 7, 9, 8, 8, 8, 8, [7, [7]], 6, 5, 6, [23, [5]]]},
+                        {first_train: "09:53", delta: [6, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6]},
+                        {first_train: "17:37", delta: [6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9]},
+                        {first_train: "21:43", delta: [10, 10, 10, 9, 10, 11, 10, 10, 10, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:03", count: 3}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:43", delta: [[99, [10]], 9, 10, 11, 10, 10, 10, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:03", count: 3}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:28", delta: [8, 8, 7, 8, 9, 9, 8, 8, 8, [5, [7]], 6, 6, 5]},
+                        {first_train: "07:39", delta: [[24, [5]], 6, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [7, [7]]]},
+                        {first_train: "17:12", delta: [6, 5, 6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8]},
+                        {first_train: "21:10", delta: [9, [11, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:28", count: 4}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:28", delta: [11, [105, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:28", count: 3}
+                    ]
+                }
+            }
+        },
+        "东北旺": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:45", delta: [8, 8, 7, 9, 8, 8, 8, 8, [7, [7]], 6, 6, [25, [5]]]},
+                        {first_train: "10:01", delta: [6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6, 6, [21, [5]]]},
+                        {first_train: "19:30", delta: [[9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9, 10, 10, 10]},
+                        {first_train: "22:15", delta: [9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:05", count: 3}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:45", delta: [[99, [10]], 9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:05", count: 3}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:25", delta: [8, 8, 7, 8, 9, 9, 8, 8, 8, [5, [7]], 6, 6, 5]},
+                        {first_train: "07:36", delta: [[24, [5]], 6, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [7, [7]]]},
+                        {first_train: "17:09", delta: [6, 5, 6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8]},
+                        {first_train: "21:07", delta: [9, [11, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:25", count: 4}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:25", delta: [11, [105, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:25", count: 3}
+                    ]
+                }
+            }
+        },
+        "龙泽西": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:50", delta: [8, 8, 7, 9, 8, 8, 8, 8, [7, [7]], 6, 5, 6, [23, [5]]]},
+                        {first_train: "10:00", delta: [6, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6]},
+                        {first_train: "17:44", delta: [6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9]},
+                        {first_train: "21:50", delta: [10, 10, 10, 9, 10, 11, 10, 10, 10, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:10", count: 3}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:50", delta: [[99, [10]], 9, 10, 11, 10, 10, 10, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:10", count: 3}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:20", delta: [8, 8, 7, 8, 9, 9, 8, 8, 8, [5, [7]], 6, 6, 6, [23, [5]]]},
+                        {first_train: "09:26", delta: [6, 5, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]]]},
+                        {first_train: "17:10", delta: [6, [22, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9, [11, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:20", count: 4}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:20", delta: [11, [105, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:20", count: 3}
+                    ]
+                }
+            }
+        },
+        "回龙观西大街": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:53", delta: [8, 8, 7, 9, 8, 8, 8, 8, [7, [7]], 6, 6, [25, [5]]]},
+                        {first_train: "10:09", delta: [6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6, 6, [21, [5]]]},
+                        {first_train: "19:38", delta: [[9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9, 10, 10, 10]},
+                        {first_train: "22:23", delta: [9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:13", count: 3}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:53", delta: [[99, [10]], 9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:13", count: 3}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:17", delta: [8, 8, 7, 8, 9, 9, 8, 8, 8, [5, [7]], 6, 6, 5]},
+                        {first_train: "07:28", delta: [[24, [5]], 6, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [7, [7]]]},
+                        {first_train: "17:01", delta: [6, 5, 6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8]},
+                        {first_train: "20:59", delta: [9, [11, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:17", count: 4}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:17", delta: [11, [105, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:17", count: 3}
+                    ]
+                }
+            }
+        },
+        "文华路": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:55", delta: [8, 8, 7, 9, 8, 8, 8, 8, [7, [7]], 6, 6, [25, [5]]]},
+                        {first_train: "10:11", delta: [6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6, 6, [21, [5]]]},
+                        {first_train: "19:40", delta: [[9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9, 10, 10, 10]},
+                        {first_train: "22:25", delta: [9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:15", count: 3}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:55", delta: [[99, [10]], 9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:15", count: 3}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:15", delta: [8, 8, 7, 8, 9, 9, 8, 8, 8, [5, [7]], 6, 6, 5]},
+                        {first_train: "07:26", delta: [[24, [5]], 6, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [7, [7]]]},
+                        {first_train: "16:59", delta: [6, 5, 6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8]},
+                        {first_train: "20:57", delta: [9, [11, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:15", count: 4}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:15", delta: [11, [105, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:15", count: 3}
+                    ]
+                }
+            }
+        },
+        "回龙观东大街": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:58", delta: [8, 8, 7, 9, 8, 8, 8, 8, [7, [7]], 6, 6, [25, [5]]]},
+                        {first_train: "10:14", delta: [6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6, 6, [21, [5]]]},
+                        {first_train: "19:43", delta: [[9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9, 10, 10, 10]},
+                        {first_train: "22:28", delta: [9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:18", count: 3}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:58", delta: [[99, [10]], 9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东回库车", first_train: "23:18", count: 3}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:11", delta: [8, 8, 7, 8, 9, 9, 8, 8, 8, [5, [7]], 6, 6, 6, [23, [5]]]},
+                        {first_train: "09:17", delta: [6, 5, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]]]},
+                        {first_train: "17:01", delta: [6, [22, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9, [11, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:11", count: 4}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:11", delta: [11, [105, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:11", count: 3}
+                    ]
+                }
+            }
+        },
+        "霍营东": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:11", delta: [8, 8, 8, 8, 9, 9, 8, 8, 7, 9, 8, 8, 8, 8, [6, [7]]]},
+                        {first_train: "07:54", delta: [6, 6, [25, [5]], 6, 6, 7, 7, 8, 8, 8, [33, [10]], 9]},
+                        {first_train: "16:48", delta: [[8, [7]], 6, 6, [22, [5]], [9, [6]], 7, 7, 7, 8, 8, 8]},
+                        {first_train: "21:33", delta: [9, 9, 10, 10, 10, 10, 9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:11", until: "05:52"},
+                        {plan: "霍营东回库车", first_train: "23:21", count: 3}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:11", delta: [[104, [10]], 9, 11, [5, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:11", count: 5},
+                        {plan: "霍营东回库车", first_train: "23:21", count: 3}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:09", delta: [8, 8, 7, 8, 9, 9, 8, 8, 8, [5, [7]], 6, 6, 5]},
+                        {first_train: "07:20", delta: [[24, [5]], 6, 6, 7, 7, 8, 8, 8, [33, [10]], 9, 8, [7, [7]]]},
+                        {first_train: "16:53", delta: [6, 5, 6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8]},
+                        {first_train: "20:51", delta: [9, [11, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:09", count: 4}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:09", delta: [11, [105, [10]]]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:09", count: 3}
+                    ]
+                }
+            }
+        },
+        "天通苑": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:16", delta: [8, 8, 8, 8, 9, 9, 8, 4, 4, 7, 9, 8, 4, 4]},
+                        {first_train: "07:02", delta: [5, 3, [2, [7, 4, 3, 7]], 4, 3, 6, 6, [25, [5]], 6]},
+                        {first_train: "10:28", delta: [7, 7, 8, 8, 8, [26, [10]], 5, 5, 10, 10, 5, 5, 10]},
+                        {first_train: "16:21", delta: [5, 10, 5, 4, 8, 4, 3, [2, [7, 4, 3, 7]], 4, 3]},
+                        {first_train: "17:55", delta: [6, [22, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9]},
+                        {first_train: "22:06", delta: [10, 10, 10, 9, 11, 10, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:16", until: "05:57"},
+                        {plan: "天通苑出库车", trains: ["06:18"]},
+                        {plan: "天通苑出库车", first_train: "06:50", skip_trains: 2, count: 3},
+                        {plan: "天通苑出库车", trains: ["07:42", "07:56", "15:31"]},
+                        {plan: "天通苑出库车", first_train: "16:01", skip_trains: 2, count: 5},
+                        {plan: "天通苑出库车", trains: ["17:32", "17:46"]}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:16", delta: [[104, [10]], 9, 11, 10, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:16", count: 5}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:35", delta: [8, 9, 8, 8, 8, [6, [7]], 6, 5, 6, [24, [5]], 6, 6]},
+                        {first_train: "09:34", delta: [7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6, 5, 6, [20, [5]]]},
+                        {first_train: "18:50", delta: [[9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9, [11, [10]]]}
+                    ],
+                    filters: []
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:35", delta: [[103, [10]]]}
+                    ],
+                    filters: []
+                }
+            }
+        },
+        "太平庄": {
+            "东行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:19", delta: [8, 8, 8, 8, 9, 9, 8, 4, 4, 7, 9, 8, 4, 4]},
+                        {first_train: "07:05", delta: [5, 3, [2, [7, 3, 4, 7]], 3, 4, 6, 5, 6, [24, [5]]]},
+                        {first_train: "10:25", delta: [6, 7, 7, 8, 8, 8, [26, [10]], 5, 5, 10, 10, 5, 5]},
+                        {first_train: "16:19", delta: [5, 5, 10, 4, 5, 8, 3, 4, [2, [7, 3, 4, 7]], 3]},
+                        {first_train: "17:52", delta: [6, 5, 6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8]},
+                        {first_train: "21:50", delta: [9, 10, 10, 10, 10, 9, 10, 11, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:19", until: "06:00"},
+                        {plan: "天通苑出库车", trains: ["06:21"]},
+                        {plan: "天通苑出库车", first_train: "06:53", skip_trains: 2, count: 3},
+                        {plan: "天通苑出库车", trains: ["07:44", "07:58", "15:34"]},
+                        {plan: "天通苑出库车", first_train: "16:04", skip_trains: 2, count: 5},
+                        {plan: "天通苑出库车", trains: ["17:34", "17:48"]}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:19", delta: [[104, [10]], 9, 10, 11, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:19", count: 5}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:32", delta: [9, 9, 8, 8, 8, [5, [7]], 6, 6, 6, [24, [5]], 6, 5]},
+                        {first_train: "09:24", delta: [7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6, 6, [21, [5]]]},
+                        {first_train: "18:47", delta: [[9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9, [11, [10]]]}
+                    ],
+                    filters: []
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:32", delta: [[103, [10]]]}
+                    ],
+                    filters: []
+                }
+            }
+        },
+        "天通苑东": {
+            "东行": {
+                // 以+3min计算
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:22", delta: [8, 8, 8, 8, 9, 9, 8, 4, 4, 7, 9, 8, 4, 4]},
+                        {first_train: "07:08", delta: [5, 3, [2, [7, 3, 4, 7]], 3, 4, 6, 5, 6, [24, [5]]]},
+                        {first_train: "10:28", delta: [6, 7, 7, 8, 8, 8, [26, [10]], 5, 5, 10, 10, 5, 5]},
+                        {first_train: "16:22", delta: [5, 5, 10, 4, 5, 8, 3, 4, [2, [7, 3, 4, 7]], 3]},
+                        {first_train: "17:55", delta: [6, 5, 6, [21, [5]], [9, [6]], 7, 7, 7, 8, 8, 8, 8]},
+                        {first_train: "21:53", delta: [9, 10, 10, 10, 10, 9, 10, 11, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:22", until: "06:03"},
+                        {plan: "天通苑出库车", trains: ["06:24"]},
+                        {plan: "天通苑出库车", first_train: "06:56", skip_trains: 2, count: 3},
+                        {plan: "天通苑出库车", trains: ["07:47", "08:01", "15:37"]},
+                        {plan: "天通苑出库车", first_train: "16:07", skip_trains: 2, count: 5},
+                        {plan: "天通苑出库车", trains: ["17:37", "17:51"]}
+                    ]
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:22", delta: [[104, [10]], 9, 10, 11, 10]}
+                    ],
+                    filters: [
+                        {plan: "霍营东出库车", first_train: "05:22", count: 5}
+                    ]
+                }
+            },
+            "西行": {
+                "工作日": {
+                    schedule: [
+                        {first_train: "05:29", delta: [9, 9, 8, 8, 8, [5, [7]], 6, 6, 5, 6, [24, [5]], 6]},
+                        {first_train: "09:21", delta: [7, 7, 8, 8, 8, [33, [10]], 9, 8, [8, [7]], 6, 5, 6, [20, [5]]]},
+                        {first_train: "18:44", delta: [[9, [6]], 7, 7, 7, 8, 8, 8, 8, 9, 9, [11, [10]]]}
+                    ],
+                    filters: []
+                },
+                "双休日": {
+                    schedule: [
+                        {first_train: "05:29", delta: [[103, [10]]]}
+                    ],
+                    filters: []
+                }
+            }
+        }
+    }
+}
