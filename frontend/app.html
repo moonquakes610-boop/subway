@@ -15,7 +15,7 @@
         <div class="top-nav__links">
           <a href="#guide-query">路线查询</a>
           <a href="#guide-rules">乘车规则</a>
-          <a href="#guide-prohibited">禁带物品</a>
+          <a href="#guide-prohibited">携带查询</a>
           <a href="#guide-a11y">无障碍服务</a>
           <a href="#guide-feedback">问题反馈</a>
           <a href="/profile.html">个人中心</a>
@@ -178,10 +178,27 @@
       </section>
 
       <section class="card section-anchor section-loaded" id="guide-prohibited" aria-labelledby="t-proh">
-        <h2 class="section-title" id="t-proh">禁止携带物品</h2>
-        <p class="section-lead" id="prohibitedIntro">按风险类别分组的禁带/限带示例（以法规与现场为准）。</p>
-        <div class="ref-status" id="prohibitedLoadStatus" role="status">正在加载…</div>
-        <div id="prohibitedGrid" class="prohibited-grid"></div>
+        <h2 class="section-title" id="t-proh">携带物品查询</h2>
+        <p class="section-lead" id="prohibitedIntro">输入物品名称，系统在演示用禁带目录中检索相关说明（以法规与安检现场为准）。</p>
+        <div class="prohibited-query-row">
+          <label class="sr-only" for="prohibitedQueryInput">要携带的物品</label>
+          <input
+            type="text"
+            id="prohibitedQueryInput"
+            class="prohibited-query-input"
+            maxlength="80"
+            placeholder="例如：打火机、酒精喷雾、折叠刀、宠物…"
+            autocomplete="off"
+          />
+          <button type="button" class="primary" id="prohibitedCheckBtn">查询</button>
+        </div>
+        <div class="ref-status" id="prohibitedLoadStatus" role="status">正在加载目录数据…</div>
+        <div id="prohibitedCheckResult" class="prohibited-check-result" aria-live="polite"></div>
+        <details class="prohibited-details">
+          <summary>展开完整分类目录（参考）</summary>
+          <p class="section-lead prohibited-details-hint">以下为按风险类别整理的条目，便于对照；日常查询可只用上方输入框。</p>
+          <div id="prohibitedGrid" class="prohibited-grid"></div>
+        </details>
       </section>
 
       <section class="card section-anchor section-loaded" id="guide-a11y" aria-labelledby="t-a11y">

@@ -173,6 +173,9 @@
     var a11yResultStatus = $("a11yResultStatus");
     var rulesLoadStatus = $("rulesLoadStatus");
     var prohibitedLoadStatus = $("prohibitedLoadStatus");
+    var prohibitedQueryInput = $("prohibitedQueryInput");
+    var prohibitedCheckBtn = $("prohibitedCheckBtn");
+    var prohibitedCheckResult = $("prohibitedCheckResult");
     var a11yMeta = $("a11yMeta");
 
     var ICON_MAP = {
@@ -1067,6 +1070,148 @@
       return "pitem-card " + (m[color] || "pitem-card--hazard");
     }
 
+    function highlightQueryInText(text, q) {
+      if (!text || !q) {
+        return document.createTextNode(text || "");
+      }
+      var snippet = String(text);
+      var query = String(q);
+      var idx = snippet.indexOf(query);
+      if (idx < 0) {
+        idx = snippet.toLowerCase().indexOf(query.toLowerCase());
+      }
+      if (idx < 0) {
+        return document.createTextNode(snippet);
+      }
+      var frag = document.createDocumentFragment();
+      frag.appendChild(document.createTextNode(snippet.slice(0, idx)));
+      var mk = document.createElement("mark");
+      mk.className = "prohibited-hit";
+      mk.textContent = snippet.slice(idx, idx + query.length);
+      frag.appendChild(mk);
+      frag.appendChild(document.createTextNode(snippet.slice(idx + query.length)));
+      return frag;
+    }
+
+    function renderProhibitedCheckResult(d) {
+      var box = prohibitedCheckResult;
+      if (!box) {
+        return;
+      }
+      box.innerHTML = "";
+      box.className = "prohibited-check-result";
+      if (!d) {
+        return;
+      }
+      var verdict = d.verdict || "";
+      if (verdict === "empty") {
+        box.classList.add("verdict-box", "verdict-box--muted");
+        var p0 = document.createElement("p");
+        p0.className = "verdict-summary";
+        p0.textContent = d.summary || "";
+        box.appendChild(p0);
+        return;
+      }
+      var wrap = document.createElement("div");
+      if (verdict === "likely_prohibited") {
+        wrap.className = "verdict-box verdict-box--warn";
+      } else if (verdict === "no_direct_hit") {
+        wrap.className = "verdict-box verdict-box--ok";
+      } else {
+        wrap.className = "verdict-box verdict-box--muted";
+      }
+      var head = document.createElement("p");
+      head.className = "verdict-summary";
+      head.textContent = d.summary || "";
+      wrap.appendChild(head);
+      var mq = document.createElement("p");
+      mq.className = "verdict-query";
+      mq.textContent = "您的查询：「" + (d.query || "") + "」";
+      wrap.appendChild(mq);
+      var matches = d.matches || [];
+      for (var mi = 0; mi < matches.length; mi++) {
+        (function (m) {
+          var card = document.createElement("div");
+          card.className = "prohibited-match-card";
+          var h3 = document.createElement("h3");
+          h3.textContent = m.label || m.short_label || m.category_id || "相关类别";
+          card.appendChild(h3);
+          var ul = document.createElement("ul");
+          var sn = m.matched_snippets || [];
+          for (var sj = 0; sj < sn.length; sj++) {
+            var li = document.createElement("li");
+            li.appendChild(highlightQueryInText(sn[sj], d.query));
+            ul.appendChild(li);
+          }
+          card.appendChild(ul);
+          if (m.note) {
+            var nf = document.createElement("p");
+            nf.className = "prohibited-match-note";
+            nf.textContent = m.note;
+            card.appendChild(nf);
+          }
+          wrap.appendChild(card);
+        })(matches[mi]);
+      }
+      if (d.footer) {
+        var ft = document.createElement("p");
+        ft.className = "verdict-footer";
+        ft.textContent = d.footer;
+        wrap.appendChild(ft);
+      }
+      box.appendChild(wrap);
+    }
+
+    function runProhibitedCheck() {
+      var q = prohibitedQueryInput ? String(prohibitedQueryInput.value || "").trim() : "";
+      if (!q) {
+        renderProhibitedCheckResult({
+          verdict: "empty",
+          summary: "请输入要查询的物品名称，例如：打火机、酒精、宠物、水果刀。",
+        });
+        if (prohibitedQueryInput) {
+          prohibitedQueryInput.focus();
+        }
+        return;
+      }
+      if (prohibitedCheckResult) {
+        prohibitedCheckResult.innerHTML = "";
+        prohibitedCheckResult.className = "prohibited-check-result verdict-box verdict-box--muted";
+        prohibitedCheckResult.textContent = "正在查询…";
+      }
+      jsonFetch("/api/reference/prohibited-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ q: q }),
+      })
+        .then(function (r) {
+          return r.json().then(function (j) {
+            return { ok: r.ok, status: r.status, j: j };
+          });
+        })
+        .then(function (pack) {
+          var j = pack.j;
+          if (pack.ok && j && j.ok && j.data) {
+            renderProhibitedCheckResult(j.data);
+          } else {
+            var errMsg = (j && j.error) || "查询失败，请稍后重试。";
+            if (j && j.code === "csrf_failed") {
+              errMsg = "登录状态或安全校验过期，请按 F5 刷新页面后再试。";
+            }
+            renderProhibitedCheckResult({
+              verdict: "empty",
+              summary: errMsg,
+            });
+          }
+        })
+        .catch(function (e) {
+          renderProhibitedCheckResult({
+            verdict: "empty",
+            summary: (e && e.message) || "网络异常。",
+          });
+        });
+    }
+
     function renderProhibited(d) {
       var grid = $("prohibitedGrid");
       if (!d || !d.categories) {
@@ -1077,7 +1222,7 @@
       if (d.description) {
         var first = d.title ? d.title + "。" : "";
         $("prohibitedIntro").textContent =
-          first + d.description + " 数据文件：data/reference/prohibited_items.json 。";
+          first + d.description + " 日常可只用上方输入框检索；下方可展开完整分类作对照。";
       }
       grid.innerHTML = "";
       for (var c = 0; c < d.categories.length; c++) {
@@ -1130,7 +1275,8 @@
         f.textContent = d.footer;
         grid.appendChild(f);
       }
-      prohibitedLoadStatus.textContent = "已加载 " + d.categories.length + " 个类别。";
+      prohibitedLoadStatus.textContent =
+        "目录已就绪（共 " + d.categories.length + " 个类别）。请输入物品名称后点击「查询」。";
     }
 
     function loadReference() {
@@ -1159,7 +1305,7 @@
         if (r2 && r2.ok && r2.data) {
           renderProhibited(r2.data);
         } else {
-          prohibitedLoadStatus.textContent = "禁带物品加载失败。";
+          prohibitedLoadStatus.textContent = "禁带目录加载失败。";
           prohibitedLoadStatus.classList.add("is-error");
         }
       });
@@ -1196,6 +1342,16 @@
         query();
       }
     });
+    if (prohibitedCheckBtn) {
+      prohibitedCheckBtn.addEventListener("click", runProhibitedCheck);
+    }
+    if (prohibitedQueryInput) {
+      prohibitedQueryInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          runProhibitedCheck();
+        }
+      });
+    }
     applyModeTheme(currentGuideMode);
     renderSceneFocus(currentGuideMode);
     loadReference();

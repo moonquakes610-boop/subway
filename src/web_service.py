@@ -156,6 +156,22 @@ def query_route(
     if notes:
         guide_text = guide_text + "\n\n【票价估算说明】\n" + "\n".join(notes)
 
+    rag_block = None
+    try:
+        from .langchain_rag import augment_guide_with_langchain
+
+        rag_block = augment_guide_with_langchain(
+            guide_text=guide_text,
+            guide_mode=guide_mode,
+            from_station=start_station,
+            to_station=end_station,
+        )
+    except ImportError:
+        pass
+    langchain_used = bool(rag_block)
+    if rag_block:
+        guide_text = guide_text + "\n\n" + rag_block
+
     return {
         "ok": True,
         "query": {"from": frm.strip(), "to": to.strip()},
@@ -201,6 +217,7 @@ def query_route(
         },
         "fare_notes": notes,
         "guide_text": guide_text,
+        "langchain_rag_used": langchain_used,
     }
 
 

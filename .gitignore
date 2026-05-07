@@ -3,3 +3,7 @@ __pycache__/
 .venv/
 venv/
 .env
+.idea/
+# 本地 SQLite 用户库勿提交
+data/auth/*.db
+*.pkl

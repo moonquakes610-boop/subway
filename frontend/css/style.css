@@ -17,7 +17,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 20px;
   scroll-padding-top: 4.5rem;
 }
 
@@ -60,6 +60,18 @@ body[data-guide-mode="rush"] {
   color: #fff;
   text-decoration: none;
   border-radius: 0 0 4px 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .skip-link:focus {
@@ -460,6 +472,129 @@ button.primary:disabled {
   border-top: 1px solid var(--line);
   margin: 0;
   padding-top: 0.75rem;
+}
+
+/* 携带物品查询 */
+.prohibited-query-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  margin: 0.75rem 0 1rem;
+}
+
+.prohibited-query-row button.primary {
+  width: auto;
+  margin-top: 0;
+  flex: 0 0 auto;
+}
+
+.prohibited-query-input {
+  flex: 1 1 12rem;
+  min-width: 10rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.prohibited-check-result {
+  margin-top: 0.5rem;
+  min-height: 0;
+}
+
+.prohibited-check-result.verdict-box--muted:only-child {
+  margin-top: 0.75rem;
+}
+
+.verdict-box {
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+}
+
+.verdict-box--warn {
+  background: #fff8f5;
+  border-color: #e8b4a4;
+}
+
+.verdict-box--ok {
+  background: #f4faf6;
+  border-color: #a5d6a7;
+}
+
+.verdict-box--muted {
+  background: #f4f6f8;
+  color: #444;
+}
+
+.verdict-summary {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.verdict-query {
+  margin: 0 0 0.75rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.verdict-footer {
+  margin: 0.85rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.prohibited-match-card {
+  margin-top: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  background: #fff;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+}
+
+.prohibited-match-card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
+
+.prohibited-match-card ul {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.prohibited-match-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.prohibited-hit {
+  background: #fff59d;
+  padding: 0 0.15em;
+  border-radius: 2px;
+}
+
+.prohibited-details {
+  margin-top: 1.25rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.prohibited-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.prohibited-details-hint {
+  margin-top: 0.75rem !important;
+  font-size: 0.88rem !important;
 }
 
 /* 禁带物品网格 */

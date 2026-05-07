@@ -1,7 +1,9 @@
 """
 北京地铁出行指南 — HTTP 服务（静态页 + 鉴权 API）。
 
-启动（项目根目录）：
+启动（项目根目录 E:\\BeijingSubwaySystem）：
+    双击 启动服务.bat（推荐，自动自检并用绝对路径启动，避免跑错副本）
+    或手动：
     pip install -r requirements.txt
     py -3 scripts/init_auth_db.py
     py -3 scripts/seed_demo_user.py
@@ -9,6 +11,9 @@
 
 访问：http://127.0.0.1:8765/  （首页；核心功能需登录）
 环境变量：BSG_SECRET_KEY（生产必设）、BSG_HOST、BSG_PORT
+LangChain RAG（可选）：OPENAI_API_KEY；可选 OPENAI_BASE_URL、BSG_LLM_MODEL、BSG_EMBED_MODEL；关闭设 BSG_LANGCHAIN=0
+PDF 入库：将手册 PDF 放入 data/knowledge_pdf_in/ 后执行 py -3 scripts/ingest_manual_pdfs.py
+RAG 评测：py -3 scripts/eval_rag_benchmark.py（输出 output/rag_eval_report.txt）
 """
 
 from __future__ import annotations
@@ -67,6 +72,7 @@ from src.errors import SubwayGuideError
 from src.logutil import setup_logging
 from src.reference_data import (
     batch_station_accessibility,
+    check_prohibited_carry,
     load_passenger_rules,
     load_prohibited_items,
     load_runtime_status,
@@ -252,13 +258,24 @@ def page_admin():
 
 @app.route("/api/health", methods=["GET"])
 def health():
-    return jsonify(
-        {
-            "ok": True,
-            "service": "beijing-subway-guide",
-            "auth": "session",
-        }
-    )
+    out: dict = {
+        "ok": True,
+        "service": "beijing-subway-guide",
+        "auth": "session",
+        "server_root": str(ROOT),
+    }
+    # 浏览器打开 /api/health?diag=1 可确认：当前进程是否来自本机 E 盘工程、携带物查询是否正常
+    if request.args.get("diag") == "1":
+        try:
+            from src import reference_data as _ref
+
+            out["reference_data_py"] = str(Path(_ref.__file__).resolve())
+            out["prohibited_json"] = str(_ref.REF_DIR / "prohibited_items.json")
+            out["carry_pet"] = _ref.check_prohibited_carry("宠物")
+            out["carry_kitten"] = _ref.check_prohibited_carry("小猫")
+        except Exception as e:
+            out["diag_error"] = f"{type(e).__name__}: {e}"
+    return jsonify(out)
 
 
 # ----- 鉴权
@@ -514,6 +531,21 @@ def reference_prohibited(current_user, **__):
     return jsonify({"ok": True, "data": load_prohibited_items()})
 
 
+@app.route("/api/reference/prohibited-check", methods=["POST"])
+@require_auth
+def reference_prohibited_check(current_user, **__):
+    body = request.get_json(silent=True) or {}
+    q = body.get("q")
+    if q is None:
+        q = body.get("query")
+    q = str(q or "").strip()
+    if len(q) > 80:
+        return _json_err("查询内容过长（最多 80 字）。", 400)
+    resp = jsonify({"ok": True, "data": check_prohibited_carry(q)})
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
+
+
 @app.route("/api/reference/station-accessibility-meta", methods=["GET"])
 @require_auth
 def reference_a11y_meta(current_user, **__):
@@ -703,13 +735,30 @@ def admin_api_feedback_update(feedback_id: int, current_user, **__):
 
 def main() -> int:
     from src import auth_db
+    from src.system_data_mirror import sync_mirrored_system_tables
 
     auth_db.ensure_db()
+    sync_mirrored_system_tables()
     host = os.environ.get("BSG_HOST", "127.0.0.1")
     port = int(os.environ.get("BSG_PORT", "8765"))
     print("── 北京地铁出行指南 ──", flush=True)
+    print(f"  工程根目录（数据与代码以此为准）：{ROOT}", flush=True)
     print(f"  打开首页：http://{host}:{port}/", flush=True)
     print(f"  核心功能：http://{host}:{port}/app.html  （需登录）", flush=True)
+    print(
+        f"  自检（确认是这份工程）：http://{host}:{port}/api/health?diag=1",
+        flush=True,
+    )
+    try:
+        from src.reference_data import check_prohibited_carry
+
+        _pet = check_prohibited_carry("宠物")
+        print(
+            f"  携带物「宠物」试查：verdict={_pet.get('verdict')}（应为 likely_prohibited）",
+            flush=True,
+        )
+    except Exception as e:
+        print(f"  [警告] 携带物自检异常：{e}", flush=True)
     app.run(host=host, port=port, debug=False, threaded=True)
     return 0
 

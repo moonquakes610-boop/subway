@@ -86,6 +86,17 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="日志级别 DEBUG（默认 INFO）",
     )
+    parser.add_argument(
+        "--guide-mode",
+        default="commute",
+        choices=("commute", "tour", "senior", "rush"),
+        help="出行场景（与 Web 一致；与 --langchain 联用）",
+    )
+    parser.add_argument(
+        "--langchain",
+        action="store_true",
+        help="在已配置 OPENAI_API_KEY 时追加 LangChain RAG 补充段（需联网调用嵌入与聊天模型）",
+    )
     args = parser.parse_args(argv)
 
     setup_logging(logging.DEBUG if args.verbose else logging.INFO)
@@ -176,6 +187,20 @@ def main(argv: list[str] | None = None) -> int:
         )
 
         full_text = guide_body + appendix + fare_block
+        if args.langchain:
+            try:
+                from .langchain_rag import augment_guide_with_langchain
+
+                rag_extra = augment_guide_with_langchain(
+                    guide_text=guide_body[:4500],
+                    guide_mode=args.guide_mode,
+                    from_station=start_station,
+                    to_station=end_station,
+                )
+                if rag_extra:
+                    full_text = full_text + "\n\n" + rag_extra
+            except ImportError:
+                log.warning("未安装 LangChain 依赖，已跳过 --langchain（请 pip install -r requirements.txt）")
 
         elapsed = time.perf_counter() - t0
         load_sec = t_after_load - t0

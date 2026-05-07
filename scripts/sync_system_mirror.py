@@ -1,8 +1,8 @@
 """
-初始化/校验 SQLite 用户库（在 data/auth/ 下创建 app.db 与表结构）。
+仅将 data/luxian 同步到 app.db 中的 sys_* 镜像表，不启动 Web。
 
 用法（项目根目录）:
-    py -3 scripts/init_auth_db.py
+    py -3 scripts/sync_system_mirror.py
 """
 
 from __future__ import annotations
@@ -14,14 +14,13 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.auth_db import DB_PATH, ensure_db
-from src.system_data_mirror import sync_mirrored_system_tables
+from src.system_data_mirror import sync_mirrored_system_tables, mirror_summary
 
 
 def main() -> int:
-    ensure_db()
     sync_mirrored_system_tables()
-    print(f"数据库就绪：{DB_PATH}（已同步线路/车站/换乘镜像表）", flush=True)
+    for k, v in sorted(mirror_summary().items()):
+        print(f"  {k} = {v}", flush=True)
     return 0
 
 

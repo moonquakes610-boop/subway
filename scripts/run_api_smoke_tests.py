@@ -115,6 +115,19 @@ def main() -> int:
         d = _json(r)
         _must(r.status_code == 200 and d.get("ok") is True and isinstance(d.get("items"), list), "我的反馈查询失败")
 
+        r = client.post(
+            "/api/reference/prohibited-check",
+            headers={"X-CSRF-Token": csrf},
+            json={"q": "打火机"},
+        )
+        d = _json(r)
+        _must(
+            r.status_code == 200
+            and d.get("ok") is True
+            and d.get("data", {}).get("verdict") == "likely_prohibited",
+            f"携带物品查询失败: {r.status_code} {d}",
+        )
+
         # 3) 管理员流程
         client.get("/api/auth/logout")
         admin_user = "smoke_admin"

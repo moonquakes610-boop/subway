@@ -54,3 +54,39 @@ CREATE INDEX IF NOT EXISTS idx_feedback_user_time
 
 CREATE INDEX IF NOT EXISTS idx_feedback_status_time
   ON feedback (status, created_at DESC);
+
+-- 以下为「系统数据镜像」：由 data/luxian 与 metadata 同步，便于在 DataGrip 中浏览线路/车站/换乘。
+CREATE TABLE IF NOT EXISTS sys_sync_meta (
+  k TEXT PRIMARY KEY,
+  v TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS sys_lines (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  line_name TEXT NOT NULL,
+  color TEXT,
+  source_file TEXT NOT NULL,
+  station_count INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_sys_lines_name ON sys_lines (line_name);
+
+CREATE TABLE IF NOT EXISTS sys_stations (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  line_name TEXT NOT NULL,
+  seq INTEGER NOT NULL,
+  station_name TEXT NOT NULL,
+  dist_to_next_m REAL,
+  aliases TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_sys_stations_line ON sys_stations (line_name, seq);
+CREATE INDEX IF NOT EXISTS idx_sys_stations_name ON sys_stations (station_name);
+
+CREATE TABLE IF NOT EXISTS sys_transfers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  hub_station TEXT NOT NULL,
+  from_line TEXT NOT NULL,
+  to_line TEXT NOT NULL,
+  walk_minutes REAL,
+  extra_json TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_sys_transfers_hub ON sys_transfers (hub_station);
